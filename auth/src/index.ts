@@ -13,11 +13,24 @@ import { NotFoundError } from "./errors/not-found-error";
 import { RequestValidationError } from "./errors/request-validation-error";
 import { DbConnectionError } from "./errors/database-connection-error";
 import dotenv from "dotenv";
+import cookieSession = require("cookie-session");
+const ngrok = require("@ngrok/ngrok");
+
 dotenv.config();
 
 const app = express();
-
+//allow proxy based traffic
+app.set('trust proxy',true);
 app.use(json());
+
+app.use(
+
+cookieSession({
+    signed: false,
+    secure: true,
+})
+
+)
 
 app.use(currentUserRouter);
 app.use(signinRouter);
@@ -55,11 +68,20 @@ await mongoose.connect(process.env.MONGODB_ATLAS_URI as string);
         console.error(err);
      }
 
+
      app.listen(6000, () => {    
 
         console.log("the Server is running on port  6000");
-    
+       if(process.env.ENVIRONMENT=="dev")
+       {
+        (async function() {
+          const listener = await ngrok.connect({ addr: 6000, authtoken_from_env: true });
+          console.log(`Ingress via ngrok established at: ${listener.url()}`);
+        })();
+       }
     });
+
+
 }
 
 start();

@@ -7,6 +7,7 @@ import {json} from 'body-parser';
 import { RequestValidationError } from '../errors/request-validation-error';
 import { DbConnectionError } from '../errors/database-connection-error';
 import { BadRequestError } from '../errors/bad-request-error';
+import jwt from "jsonwebtoken";
 const router = express.Router();
 
 
@@ -41,6 +42,14 @@ else
   try{
   const user= User.build({email,password});
   await user.save();
+  
+  const userJWToken= 
+jwt.sign({
+   id : user.id,
+   email: user.id,
+    
+  },(process.env.JWT_KEY as string));
+  req.session= {userJWToken};
   console.log("creating user signup");
   
   res.send(user);
