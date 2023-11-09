@@ -12,6 +12,8 @@ import { errorHandler } from "./middlewares/error-handler";
 import { NotFoundError } from "./errors/not-found-error";
 import { RequestValidationError } from "./errors/request-validation-error";
 import { DbConnectionError } from "./errors/database-connection-error";
+import dotenv from "dotenv";
+dotenv.config();
 
 const app = express();
 
@@ -44,9 +46,9 @@ const start=async () => {
     
     try 
     {
-    await mongoose.connect('mongodb://auth-mongo-srv:27017/auth');
-
-     console.log("connected  to mongo db")
+    //await mongoose.connect('mongodb://auth-mongo-srv:27017/auth');
+await mongoose.connect(process.env.MONGODB_ATLAS_URI as string);
+     console.log("connected  to mongo db");
      }
      catch(err)
      {

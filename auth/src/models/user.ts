@@ -1,4 +1,5 @@
 import mongoose from "mongoose";
+import { Password } from "../services/password";
 interface UserAttributes{
 
      email:string,
@@ -37,10 +38,26 @@ const userSchema = new mongoose.Schema({
 
 
 const buildUser = (attributes:UserAttributes) => {
-    let user=  new User(attributes).save( );
+    let user=  new User(attributes);
     return user; 
  };
-userSchema.statics.build= buildUser;
+
+ userSchema.pre('save',async function(next)
+ {
+
+  console.log("presave hook")
+
+   if(this.isModified("password"))
+   {
+     this.set("password",await Password.toHash(this.get("password")));
+   
+   }
+
+   console.log("calling next:"+this.get("password"))
+   next();
+
+ });
+ userSchema.statics.build= buildUser;
 
 const User = mongoose.model<UserDoc,UserModel>("User", userSchema);
 
@@ -51,5 +68,5 @@ const user = User.build({
 })
 */
 
-console.log(User.find({email:"email1@email.com"}).count());
+//console.log(User.find({email:"email1@email.com"}).count());
 export {User};

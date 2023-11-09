@@ -1,4 +1,6 @@
 import express, {Request,Response} from 'express'
+
+ 
 import {body, validationResult} from "express-validator";
 import { User } from '../models/user';
 import {json} from 'body-parser';
@@ -33,13 +35,22 @@ if(existingUser)
     console.log("User already exists");
   throw new BadRequestError("Email already in use");
 }
-  const user= User.build({email,password});
+else
+{
 
+  try{
+  const user= User.build({email,password});
   await user.save();
   console.log("creating user signup");
   
   res.send(user);
-
+  }
+  catch(err)
+  {
+    console.log(err);
+    res.send("error while saving")
+  }
+}
   
 
  

@@ -7,7 +7,7 @@ export const errorHandler = (err: Error,req:Request,res:Response,next:NextFuncti
 
 
     if (err instanceof CustomError) {
-        console.log("custom error ");
+        console.log("custom error: "+err);
 
         return res.status(err.statusCode).send({errors:err.serializeErrors()})
       }
