@@ -49,7 +49,7 @@ jwt.sign({
   req.session= {userJWToken};
   console.log("creating user signup");
   
-  res.send(user);
+  res.status(201).send(user);
   }
   catch(err)
   {

@@ -3,27 +3,13 @@ import {json} from 'body-parser';
 
 const router = express.Router();
 import  jwt from 'jsonwebtoken';
+import { currentUser } from '../middlewares/current-user';
+import { requireAuth } from '../middlewares/require-auth';
 
-router.post('/api/users/currentuser',(req,res)=>{
+router.post('/api/users/currentuser', currentUser,requireAuth,   (req,res)=>{
 
-     if(!req.session?.userJWToken)
-     {
-        console.log("userJWToken not set");
-        return res.send({currentUser:null});
-     }
+     res.send({currentUser: req.currentUser || null});
 
-     try {
-
-      const userPayload = jwt.verify(req.session.userJWToken, process.env.JWT_KEY as string);
-     
-      console.log("cuser:"+userPayload);
-      res.send({currentUser:userPayload});
-    }
-     catch(err)
-     {
-        console.log("cuser error"+err);
-        res.send({currentUser:null});
-     }
 });
 
 export {router as currentUserRouter};
