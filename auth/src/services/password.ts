@@ -10,7 +10,7 @@ const scryptAsync = promisify(scrypt);
     {
         const salt = randomBytes(8).toString('hex');
         const buffer = (await scryptAsync(password, salt, 64)) as Buffer;
-        return `${buffer.toString('hex')}.${salt}}`   
+        return `${buffer.toString('hex')}.${salt}`   
 
 
     }
@@ -19,7 +19,7 @@ const scryptAsync = promisify(scrypt);
     {
 
         const [hashedPassword,salt]= encryptedPassword.split(".");
-        const buffer = await (scryptAsync(password, salt, 64)) as Buffer;
+        const buffer = (await (scryptAsync(password, salt, 64))) as Buffer;
 
         return buffer.toString("hex")===hashedPassword;
     }

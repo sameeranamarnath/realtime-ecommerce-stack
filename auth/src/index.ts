@@ -14,8 +14,9 @@ import { RequestValidationError } from "./errors/request-validation-error";
 import { DbConnectionError } from "./errors/database-connection-error";
 import dotenv from "dotenv";
 import cookieSession = require("cookie-session");
+import { Password } from "./services/password";
 const ngrok = require("@ngrok/ngrok");
-
+import { User } from "./models/user";
 dotenv.config();
 
 const app = express();
@@ -69,15 +70,18 @@ await mongoose.connect(process.env.MONGODB_ATLAS_URI as string);
      }
 
 
-     app.listen(6000, () => {    
+     app.listen(6000, async () => {    
 
         console.log("the Server is running on port  6000");
-       if(process.env.ENVIRONMENT=="dev")
+
+       
+      if(process.env.ENVIRONMENT=="dev")
        {
         (async function() {
           const listener = await ngrok.connect({ addr: 6000, authtoken_from_env: true });
           console.log(`Ingress via ngrok established at: ${listener.url()}`);
         })();
+        
        }
     });
 

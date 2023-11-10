@@ -4,9 +4,9 @@ import {json} from 'body-parser';
 const router = express.Router();
 
 
-router.get('/api/users/signout',(req,res)=>{
-
- res.send("Hello!!!")
+router.post('/api/users/signout',(req,res)=>{
+req.session=null;
+ res.send({})
 
 });
 
