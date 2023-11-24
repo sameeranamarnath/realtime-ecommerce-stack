@@ -1,4 +1,4 @@
-Full stack ecommerce app using best practices(hopefully) in
+work in progress Full stack ecommerce app using best practices(hopefully) in
 
 1. Node (typescript plus javascript)
 2. React (typescript)
